@@ -252,8 +252,8 @@ public class PuzzleSolver {
 		double result = 0; // Dov
 		double sum = 0;
 		Integer[] off = chosenParts.get(startPart);
-		int xOff = partsNum / 4 - minX - (startPart - 1) % puzzleParts.nw - 1;
-		int yOff = partsNum / 4 - minY - (startPart - 1) / puzzleParts.nw;
+		int xOff = boardCenter - minX - (startPart - 1) % puzzleParts.nw - 1;
+		int yOff = boardCenter - minY - (startPart - 1) / puzzleParts.nw;
 		System.out.println("Off: " + xOff + " " + yOff);
 		for (int j = minX; j < maxX + 1; j++) {
 			for (int i = minY; i < maxY + 1; i++) {
@@ -336,8 +336,8 @@ public class PuzzleSolver {
 		nimg = new BufferedImage(partSize * (borders[3] - borders[2] + 1),
 				partSize * (borders[1] - borders[0] + 1),
 				BufferedImage.TYPE_INT_RGB);
-		int offsety = partsNum / 4 - borders[0];
-		int offsetx = partsNum / 4 - borders[2];
+		int offsety = boardCenter - borders[0];
+		int offsetx = boardCenter - borders[2];
 		Iterator<Integer> partsIt = chosenParts.keySet().iterator();
 		while (partsIt.hasNext()) {
 			int part = partsIt.next();
@@ -376,8 +376,8 @@ public class PuzzleSolver {
 		nimg = new BufferedImage(partSize * (maxX - minX + 1),
 				partSize * (maxY-minY + 1),
 				BufferedImage.TYPE_INT_RGB);	
-		int offsety = partsNum / 4 - minY;
-		int offsetx = partsNum / 4 - minX;
+		int offsety = boardCenter - minY;
+		int offsetx = boardCenter - minX;
 		
 		Iterator<Integer> partsIt = chosenParts.keySet().iterator();
 		while (partsIt.hasNext()) {
@@ -506,37 +506,38 @@ public class PuzzleSolver {
 					nextI[1]=GPE.nextA[1];
 					nextI[2]=GPE.nextA[2];
 				}
-				
-				double flagc = 0;
+				// The number of best buddies the new part will touch
+				double flagc = 0; 
 				boolean flag = false;
-				if (finalPlacement[nextI[2] - 1 + partsNum / 4][nextI[1]
-						+ partsNum / 4] != null
-						&& (bestBuddies[finalPlacement[nextI[2] - 1 + partsNum
-								/ 4][nextI[1] + partsNum / 4] - 1][1] == nextI[0] && bestBuddies[nextI[0]][0] == finalPlacement[nextI[2]
-								- 1 + partsNum / 4][nextI[1] + partsNum / 4] - 1)) {
+				int nextI_abs_x = get_absolute_coordinate(nextI[1]);
+				int nextI_abs_y = get_absolute_coordinate(nextI[2]);
+				Integer current_neighbor = null;
+				//above
+				current_neighbor = finalPlacement[nextI_abs_y - 1][nextI_abs_x];
+				if (current_neighbor != null
+						&& (bestBuddies[current_neighbor - 1][1] == nextI[0] 
+						&& bestBuddies[nextI[0]][0] == current_neighbor - 1)) {
 					flagc++;
 				}
-				if (finalPlacement[nextI[2] + 1 + partsNum / 4][nextI[1]
-						+ partsNum / 4] != null
-						&& (bestBuddies[finalPlacement[nextI[2] + 1 + partsNum
-								/ 4][nextI[1] + partsNum / 4] - 1][0] == nextI[0] && bestBuddies[nextI[0]][1] == finalPlacement[nextI[2]
-								+ 1 + partsNum / 4][nextI[1] + partsNum / 4] - 1)) {
+				//below
+				current_neighbor = finalPlacement[nextI_abs_y + 1][nextI_abs_x];
+				if (current_neighbor != null
+						&& (bestBuddies[current_neighbor - 1][0] == nextI[0]
+						&& bestBuddies[nextI[0]][1] == current_neighbor - 1)) {
 					flagc++;
 				}
-
-				if (finalPlacement[nextI[2] + partsNum / 4][nextI[1] - 1
-						+ partsNum / 4] != null
-						&& (bestBuddies[finalPlacement[nextI[2] + partsNum / 4][nextI[1]
-								- 1 + partsNum / 4] - 1][3] == nextI[0] && bestBuddies[nextI[0]][2] == finalPlacement[nextI[2]
-								+ partsNum / 4][nextI[1] - 1 + partsNum / 4] - 1)) {
+				//on the left
+				current_neighbor = finalPlacement[nextI_abs_y][nextI_abs_x - 1];
+				if (current_neighbor != null
+						&& (bestBuddies[current_neighbor - 1][3] == nextI[0]
+						&& bestBuddies[nextI[0]][2] == current_neighbor - 1)) {
 					flagc++;
 				}
-
-				if (finalPlacement[nextI[2] + partsNum / 4][nextI[1] + 1
-						+ partsNum / 4] != null
-						&& (bestBuddies[finalPlacement[nextI[2] + partsNum / 4][nextI[1]
-								+ 1 + partsNum / 4] - 1][2] == nextI[0] && bestBuddies[nextI[0]][3] == finalPlacement[nextI[2]
-								+ partsNum / 4][nextI[1] + 1 + partsNum / 4] - 1)) {
+				//on the right
+				current_neighbor = finalPlacement[nextI_abs_y][nextI_abs_x + 1];
+				if (current_neighbor != null
+						&& (bestBuddies[current_neighbor - 1][2] == nextI[0]
+						&& bestBuddies[nextI[0]][3] == current_neighbor - 1)) {
 					flagc++;
 				}
 				if (flagc == 0)
@@ -549,10 +550,10 @@ public class PuzzleSolver {
 				base2[0] = nextI[1];
 				base2[1] = nextI[2];
 				if ((useSize2 && (
-				base2[0] + partsNum / 4 - minX + 1 > puzzleParts.nw
-						|| maxX - base2[0] - partsNum / 4 + 1 > puzzleParts.nw
-						|| base2[1] + partsNum / 4 - minY + 1 > puzzleParts.nh || maxY
-						- base2[1] - partsNum / 4 + 1 > puzzleParts.nh))) {
+				get_absolute_coordinate(base2[0]) - minX + 1 > puzzleParts.nw
+						|| maxX - get_absolute_coordinate(base2[0]) + 1 > puzzleParts.nw
+						|| get_absolute_coordinate(base2[1]) - minY + 1 > puzzleParts.nh
+						|| maxY - get_absolute_coordinate(base2[1]) + 1 > puzzleParts.nh))) {
 					flag = true;
 				}
 				double distanceFromExpected = distanceFromExpectedByMirror(nextI[0], nextI[1], nextI[2]);//calcDistanceFromGeometricExpectedLocation(nextI[0], nextI[1], nextI[2]);//
@@ -569,8 +570,7 @@ public class PuzzleSolver {
 				}
 				// This if checks if there is a reason not to place this part
 				// (nextI[0]).
-				if ((finalPlacement[base2[1] + partsNum / 4][base2[0]
-						+ partsNum / 4]) != null || flag) {
+				if ((finalPlacement[get_absolute_coordinate(base2[1])][get_absolute_coordinate(base2[0])]) != null || flag) {
 					nextToPlace.remove(key);// nextToPlace.get(i).pollLastEntry();
 					nextToPlaceGeometry.remove(geometryKey);
 					removeFromGeometryTree(GPE); //removes from the raw list
@@ -790,30 +790,31 @@ public class PuzzleSolver {
 					int nextA[] = new int[2]; // Dov - notice here nextA has
 												// only size 2, these are the x
 												// and y coordinates
+					int nextA_absolute[] = new int[2];
 					nextA[0] = chosenParts.get(j)[0];
 					nextA[1] = chosenParts.get(j)[1];
-					if (finalPlacement[nextA[1] - 1 + partsNum / 4][nextA[0]
-							+ partsNum / 4] != null){
+					int nextA_abs_x = get_absolute_coordinate(nextA[0]);
+					int nextA_abs_y = get_absolute_coordinate(nextA[1]);
+					//above
+					if (finalPlacement[nextA_abs_y - 1][nextA_abs_x] != null){
 						diffMatrix[1][i][j] = Global.MAX_FLOAT;
-					
 						diffMatrix[0][j][i] = Global.MAX_FLOAT; //Dov added the other direction
 						
 					}
-					if (finalPlacement[nextA[1] + 1 + partsNum / 4][nextA[0]
-							+ partsNum / 4] != null){
+					//below
+					if (finalPlacement[nextA_abs_y + 1][nextA_abs_x] != null){
 						diffMatrix[0][i][j] = Global.MAX_FLOAT;
-					
 						diffMatrix[1][j][i] = Global.MAX_FLOAT; //Dov added the other direction
 						
 					}
-					if (finalPlacement[nextA[1] + partsNum / 4][nextA[0]
-							+ partsNum / 4 - 1] != null){
+					//on the left
+					if (finalPlacement[nextA_abs_y][nextA_abs_x - 1] != null){
 						diffMatrix[3][i][j] = Global.MAX_FLOAT;
 					
 						diffMatrix[2][j][i] = Global.MAX_FLOAT; //Dov added the other direction
 					}
-					if (finalPlacement[nextA[1] + partsNum / 4][nextA[0]
-							+ partsNum / 4 + 1] != null){
+					//on the right
+					if (finalPlacement[nextA_abs_y][nextA_abs_x + 1] != null){
 						diffMatrix[2][i][j] = Global.MAX_FLOAT;
 						
 						diffMatrix[3][j][i] = Global.MAX_FLOAT; //Dov added the other direction
@@ -1622,6 +1623,10 @@ public class PuzzleSolver {
 			result++;
 		}
 		return result;
+	}
+	
+	public int get_absolute_coordinate(int relative_coordinate){
+		return relative_coordinate + boardCenter;
 	}
 	
 //	private Iterator<Integer[]> getNormalValuesByGeometryIterator(Iterator<double[]> geometryKeys){
