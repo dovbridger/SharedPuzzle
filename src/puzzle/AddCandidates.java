@@ -91,8 +91,10 @@ public class AddCandidates implements Runnable{
 			int cN2 = ps.getNeighbor(nextA[1],nextA[2],relativeRighToNext.opposite());
 
 		
-			if((use_size && (nextA[1]+ps.partsNum/4-ps.minX+1>ps.puzzleParts.nw || ps.maxX-nextA[1]-ps.partsNum/4+1>ps.puzzleParts.nw ||
-					nextA[2]+ps.partsNum/4-ps.minY+1>ps.puzzleParts.nh || ps.maxY-nextA[2]-ps.partsNum/4+1>ps.puzzleParts.nh)))
+			if((use_size && (ps.get_absolute_coordinate(nextA[1])-ps.minX+1>ps.puzzleParts.nw
+					|| ps.maxX-ps.get_absolute_coordinate(nextA[1])+1>ps.puzzleParts.nw
+					|| ps.get_absolute_coordinate(nextA[2])-ps.minY+1>ps.puzzleParts.nh
+					|| ps.maxY-ps.get_absolute_coordinate(nextA[2])+1>ps.puzzleParts.nh)))
 				continue;
 
 			int flagc=0; //Best Neighbors I will have, to me + from me

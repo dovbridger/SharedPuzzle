@@ -40,10 +40,15 @@ public class Start{ //Bad name - This class arranges the changing parameters and
 			new PuzzleSolver(gp.getGenIm(),partSize,imgPath,true,false,gp.getBorderNum(),mhf);
 		} catch (Exception e) {
 			Global.neighborResult = -1;
+			Global.directResult = -1;
 			throw e;
 		}
 		System.out.println("------------------------------------------------");
-		return Global.neighborResult;
+		if (Global.NEIGHBOR_SCORE_METRIC){
+			return Global.neighborResult;
+		}else{
+			return Global.directResult;
+		}
 	}
 	
 	public static void testingScript() throws Exception{

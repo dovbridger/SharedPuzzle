@@ -16,18 +16,20 @@ public class Global {
 	
 
 	public static String[] puzzleNamesRaw = {
-											"1"//,"2","3","4","5","6","7","8","9","10","11","12","13","14","15", "16", "17", "18", "19", "20"
+											"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15", "16", "17", "18", "19", "20"
 											};
-	//public static String[] puzzleNamesRaw = Utils.read_strings_from_file("C:\\SHARE\\met_test_names.txt");
-	public final static String PUZZLE_NAME_SUFFIX = "met";
-	public static final int ORIGINAL_PART_SIZE = 128;
+	public static String[] puzzleNamesRaw_DontUse = Utils.read_strings_from_file("C://SHARE//checkouts//puzzle_gan_data//java_artifacts//Puzzle Resources//INPUT//text_name_files//color_met_names.txt");
+	public final static String PUZZLE_NAME_SUFFIX = "b";//"met";
+	public static final int ORIGINAL_PART_SIZE = 64;
+	public final static boolean NEIGHBOR_SCORE_METRIC = true;
+	public static final String FILE_TYPE = ".png";
 	//Swap the diff matrix before starting to solve the puzzle with a pre-made matrix from the file TEXTUAL_DIFF_MATRIX_FILE_MODIFIED and correction method
 	// Possible values: 'none', <string corresponding to a model from 'puzzle_gan' project>
-	public final static String[] diff_matrix_correction_methods = {"none"};//, "CalcProbabilityModel_g44_d40_b2x_0", "CalcProbabilityModel_g44_d50_b2x_0", "CalcProbabilityModel_g44_d60_b2x_0"};
+	public final static String[] diff_matrix_correction_methods = {"none", "CalcProbabilityModel_g44_d50_b2_dw64_0"};//, "CalcProbabilityModel_g44_d50_b2_dlr03_lr00002_0"};
 	public static boolean LOAD_BACKUP_SCRIPT = false;
 	public static final String SCRIPT_NAME = "backup_script1";
 	// 0-patchSize(0 means don't extrapolate), 1-numIterations, 2-burnExtent, 3-sizeOverlap (0 means use old calcDiff version), 4-patchratio
-	public final static int[][]extrapolationVals = {{0,1,0,0,100}}; 
+	public final static int[][]extrapolationVals = {{0,1,2,0,100}}; 
 	//Instead of comparing pixel to pixel, the average of pixel blocks of this size will be compared
 	public final static int[]diffBlockSizeVals = {1}; 
 	//N.I.U weights for using color vs gradients in CalcDiff. relevant only for the case with overlap.
@@ -70,7 +72,6 @@ public class Global {
 	public static final String INIT_MOD_DATA_FILE = "_init_mod_data.txt";
 	//The suffix for the name of the puzzle data file that will be used by the GuiDebugger	
 	public static final String PUZZLE_STATES_FILE = "_states_";	
-	public static final String FILE_TYPE = ".jpg";
 	// The folder name for the importance maps. Allows each puzzle to have different importance options to choose from
 	public static final String IMPORTANCE_TYPE = "_importance_"; 
 	public static final String INPUT_FOLDER = PROJECT_PATH+ "INPUT//";
@@ -119,7 +120,7 @@ public class Global {
 	
 //	public static final boolean calcErrorBaseLine = true;	//
 	public static final boolean diffBlockSliding = false;	// If the diffBlockSize is more than one, should the blocks be unique or sliding?
-	public static final boolean GUI_DEBUG = true;			// Should the GUI_Debugger run in parallel to the solving algorithm and save the data for future debugging?
+	public static final boolean GUI_DEBUG = false;			// Should the GUI_Debugger run in parallel to the solving algorithm and save the data for future debugging?
 	public static final boolean DYNAMIC_THRESHOLD_AT_FIRST_PIECE_SELECTION = true;	//If no first piece meets Genady's criteria, use a dynamic thresholding reduce system instead of just starting with 0.
 	public static final boolean MAX_CONF_IN_POOL = false;	//When adding a candidate to the pool, should its score be affected by the maximum conf he has with one of the neighbors?(rather than average?)
 
@@ -194,6 +195,7 @@ public class Global {
 	public static double SALIENCY_FACTOR;
 	public static boolean useGeometryInPool;
 	public static float neighborResult;
+	public static float directResult;
 	
 	public static void main(String[] args) throws Exception {
 		//If this is a resume of a previously started run, load the info of the previous run

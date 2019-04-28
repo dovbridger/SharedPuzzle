@@ -217,10 +217,10 @@ public class PuzzleSolver {
 		System.out.println("Time: " + (d2.getTime() - d1.getTime()) / 1000.0);
 		System.out.println("Init Time: " + (d3.getTime() - d1.getTime())
 				/ 1000.0);
-		int directResult = (int) (100 * calcDirectComp());
+		Global.directResult = (int) (100 * calcDirectComp());
 		Global.neighborResult = (float) calcNeighborsComp();
 		if (Global.saveResultImage){
-			createOutputImage(name + " direct_" + directResult + " nieghbor_"
+			createOutputImage(name + " direct_" + Global.directResult + " nieghbor_"
 					+ (int) (100 * Global.neighborResult) + "_LF_" + Global.lFactor
 					+ "_norm_" + Global.diffNorm + "_DBS_" + Global.diffBlockSize,
 					true);
