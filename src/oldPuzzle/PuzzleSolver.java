@@ -179,7 +179,9 @@ public class PuzzleSolver{
 //					System.out.println("i j: "+(finalPlacement[i][j]-1)+" "+(j-minX-xOff+(i-minY-yOff)*puzzleParts.nw));
 			}
 		}
-		System.out.println("Direct Comp: "+(sum/(partsNum-missPartsNum)));
+		double result = sum/(partsNum-missPartsNum);
+		System.out.println("Direct Comp: "+ result);
+		StartGUI.direct_score_sum += result;
 	}
 /*
 	private void calcNeighborsComp() { Dov- commented out because it wasn't used
@@ -225,7 +227,9 @@ public class PuzzleSolver{
 			}
 		}
 		//		System.out.println("Neighbors Comp: "+(sum/(-missPartsNum*4+(nh-1)*(nw)+(nw-1)*(nh))));
-		System.out.println("Neighbors Comp: "+(sum/borderNum));
+		double result = sum/borderNum;
+		System.out.println("Neighbors Comp: "+ result);
+		StartGUI.neighbor_score_sum += result;
 	}
 
 	static public Image getScaledImage(Image srcImg, int w, int h){
